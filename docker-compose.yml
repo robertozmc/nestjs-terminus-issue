@@ -7,7 +7,6 @@ services:
       context: ./
       dockerfile: docker/Dockerfile
       target: test
-    working_dir: /app
     environment:
       PORT: 3030
       MONGO_HOST: 172.19.0.20
