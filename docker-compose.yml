@@ -1,0 +1,39 @@
+version: "3.4"
+
+services:
+  terminus_test_service:
+    container_name: terminus_test_service
+    build:
+      context: ./
+      dockerfile: docker/Dockerfile
+      target: test
+    working_dir: /app
+    environment:
+      PORT: 3030
+      MONGO_HOST: 172.19.0.20
+      MONGO_PORT: 27019
+      MONGO_DATABASE: admin
+      MONGO_USERNAME: root
+      MONGO_PASSWORD: example
+    networks:
+      terminus_test:
+        ipv4_address: 172.19.0.10
+
+  terminus_test_mongo:
+    image: mongo:5.0.0
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    command: mongod --quiet --logpath /dev/null --port 27019
+    ports:
+      - 27019:27019
+    networks:
+      terminus_test:
+        ipv4_address: 172.19.0.20
+
+networks:
+  terminus_test:
+    ipam:
+      config:
+        - subnet: 172.19.0.0/16
